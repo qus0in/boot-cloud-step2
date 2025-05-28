@@ -5,10 +5,10 @@ import org.example.bootcloudstep2.dto.VoteDTO;
 import org.example.bootcloudstep2.entity.Vote;
 import org.example.bootcloudstep2.repository.VoteRepository;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
 import java.util.List;
 
 @RestController
@@ -22,10 +22,11 @@ public class VoteController {
     }
 
     @PostMapping
-    public ResponseEntity<Vote> save(VoteDTO voteDTO) {
+    public ResponseEntity<Vote> save(@RequestBody VoteDTO voteDTO) {
         Vote vote = new Vote();
         vote.setName(voteDTO.name());
+        vote.setCreatedAt(ZonedDateTime.now(ZoneOffset.UTC));
         vote = voteRepository.save(vote);
-        return ResponseEntity.ok(vote);
+        return ResponseEntity.status(201).body(vote);
     }
 }
